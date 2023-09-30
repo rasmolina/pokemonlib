@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Login.css'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
   
 function Login(){
@@ -30,7 +31,7 @@ function Login(){
               alert(error);
             }else if(error.response.status === 401){
               setErro('Usuário ou senha inválidos');
-              alert(error);
+              alert(erro);
             }
           }
 
@@ -40,6 +41,9 @@ function Login(){
 
     return (
         <>
+        <div>
+        <Header/>        
+        </div>
         <div className="login-container">
         <h2 className="title">Acesso restrito</h2>
         <div className="input-container">

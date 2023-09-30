@@ -12,9 +12,6 @@ app.get('/',(req,res)=>{
     res.send('Home Page');
 });
 
-app.get('/cadastro',(req,res)=>{
-    res.send('Cadastro!');
-});
 
 app.listen(3000,()=>{
     console.log("Conectado porta padrão 3000");

@@ -9,7 +9,7 @@ const Header = () => {
         src={process.env.PUBLIC_URL + '/pokemon-header.jpg.webp'}
         alt="Imagem do cabeçalho"
         className="header-image"
-      />
+      />      
     </header>
   );
 };
