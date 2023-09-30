@@ -57,10 +57,12 @@ function HomePage() {
       // Consulta a API PokeAPI para obter informações adicionais sobre o Pokémon selecionado
       const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${selectedPokemon.toLowerCase()}`);
       const data = response.data;
+      const indice = data.id;
 
       // Cria um novo Pokémon com os dados obtidos da API
       const newPokemon = {
         id: data.id,
+        imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${indice}.png`,
         name: capitalizeFirstLetter(data.name),
         type: data.types[0].type.name, // pego o primeiro tipo
         weight: data.weight,
@@ -110,31 +112,17 @@ function HomePage() {
 
       <div className="content">
         <h2>Pokémons cadastrados</h2>
-        <div className='table-container'>
-        <table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Nome</th>
-      <th>Tipo</th>
-      <th>Peso</th>
-      <th>Identificação</th>
-    </tr>
-  </thead>
-  <tbody>
-    {pokemonList.map((pokemon) => (
-      <tr key={pokemon.id}>
-        <td>{pokemon.id}</td>
-        <td>{pokemon.name}</td>
-        <td>{pokemon.type}</td>
-        <td>{pokemon.weight}</td>
-        <td>{pokemon.identification}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-</div>
-
+        <ul class="pokedex">
+        {pokemonList.map((pokemon) => (
+        <li key={pokemon.id} className={`card ${pokemon.type}`}>
+          <img src={pokemon.imageUrl} alt={pokemon.name} className="card-image" />
+          <h2 className="card-title">{`${pokemon.id} ${pokemon.name}`}</h2>
+          <p className="card-subtitle">{`${pokemon.weight} | ${pokemon.identification}`}</p>
+          <p className="card-subtitle">{`${pokemon.type}`} </p>
+        </li>
+      ))}
+        </ul>
+        
       </div>
 
       {showModal && (
