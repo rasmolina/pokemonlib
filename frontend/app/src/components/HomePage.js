@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,11 +6,7 @@ import axios from 'axios';
 function HomePage() {
   const navigate = useNavigate();
 
-  const [pokemonList, setPokemonList] = useState([
-    { id: 1, name: 'Pikachu' },
-    { id: 2, name: 'Charmander' },
-    { id: 3, name: 'Squirtle' },
-    ]);
+  const [pokemonList, setPokemonList] = useState([]);
 
   const [showModal, setShowModal] = useState(false); // Controla a exibição do modal
   const [selectedPokemon, setSelectedPokemon] = useState(''); // Guarda a opção selecionada no select
@@ -34,7 +30,7 @@ function HomePage() {
   };
 
   useEffect(() => {
-    // Função para buscar os nomes dos Pokémons e atualizar o estado
+    // Função assíncrona para buscar os nomes dos Pokémons e atualizar o estado
     async function fetchPokemonNames() {
       try {
         const response = await axios.get('https://pokeapi.co/api/v2/pokemon');
@@ -51,10 +47,35 @@ function HomePage() {
   }, []);
 
 
-  const savePokemon = () => {
-    // Implemente a lógica para salvar o novo Pokémon no array aqui
-    // Atualize o estado do array com o novo Pokémon
-    // Feche o modal
+  const savePokemon = async () => {
+    try {
+      // Verifica se a opção selecionada ou input não estão vazios
+      if (!selectedPokemon) {
+        alert('Selecione um Pokémon antes de salvar!');
+        return;
+      }
+
+      // Consulta a API PokeAPI para obter informações adicionais sobre o Pokémon selecionado
+      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${selectedPokemon.toLowerCase()}`);
+      const data = response.data;
+
+      // Cria um novo Pokémon com os dados obtidos da API
+      const newPokemon = {
+        id: data.id,
+        name: capitalizeFirstLetter(data.name),
+        type: data.types[0].type.name, // pego o primeiro tipo
+        weight: data.weight,
+        identification: inputValue === '' ? 'ND' : inputValue, // identificação fornecida pelo usuário
+      };
+
+      // Adiciona o novo Pokémon à lista pokemonList
+      setPokemonList((prevList) => [...prevList, newPokemon]);
+
+      closeModal();
+      alert(`Pokémon ${newPokemon.name} incluído com sucesso!`);
+    } catch (error) {
+      console.error('Erro ao salvar o Pokémon:', error);
+    }
   };
 
   // Função para formatar o texto com a primeira letra maiúscula
@@ -97,6 +118,7 @@ function HomePage() {
       <th>Id</th>
       <th>Nome</th>
       <th>Tipo</th>
+      <th>Peso</th>
       <th>Identificação</th>
     </tr>
   </thead>
@@ -105,8 +127,9 @@ function HomePage() {
       <tr key={pokemon.id}>
         <td>{pokemon.id}</td>
         <td>{pokemon.name}</td>
-        <td>{/* Adicione a lógica para o tipo aqui */}</td>
-        <td>{/* Adicione a lógica para a identificação aqui */}</td>
+        <td>{pokemon.type}</td>
+        <td>{pokemon.weight}</td>
+        <td>{pokemon.identification}</td>
       </tr>
     ))}
   </tbody>
