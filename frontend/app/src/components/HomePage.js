@@ -11,7 +11,6 @@ function HomePage() {
   const [showModal, setShowModal] = useState(false); // Controla a exibição do modal
   const [selectedPokemon, setSelectedPokemon] = useState(''); // Guarda a opção selecionada no select
   const [inputValue, setInputValue] = useState(''); // Guarda o valor do input
-  const [pokemonOptions, setPokemonOptions] = useState([]); // Guarda as opções do select
   const [pokemonNames, setPokemonNames] = useState('');
 
   
